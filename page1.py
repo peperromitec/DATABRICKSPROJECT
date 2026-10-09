@@ -1,5 +1,5 @@
 import streamlit as st
-from DATABRICKSPROJECT.graphs import cargar_bd,plot_1_barras
+from graphs import cargar_bd,plot_1_barras
 from dictionary import columnas
 
 st.set_page_config(page_title = "Encuesta Dominio IA", layout = "wide")
@@ -7,12 +7,15 @@ st.title("Dashboard EDA🦧🤖")
 #=====CARGAR FUNCIONES==========================
 columnador = columnas()
 df = cargar_bd()
+
 #=========================================================
 with columnador["graph1"][0]:
-    fig = plot_1_barras(df)
-    st.plotly_chart(fig)
+    fig, metricas = plot_1_barras(df)
+    st.plotly_chart(fig, use_container_width=True)
 with columnador["graph1"][1]:
-    st.write("Espacio 2")
+    st.subheader("Productos más solicitados")
+    st.metric("Total de productos", metricas['frecuencia'].sum())
+    st.metric("Otros productos", 1000 - abs(metricas['frecuencia'].sum()))
 st.divider()
 
 # #=========================================================
